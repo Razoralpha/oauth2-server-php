@@ -34,11 +34,12 @@ interface AuthorizationCodeInterface
      * An associative array as below, and NULL if the code is invalid
      * @code
      * return array(
-     *     "client_id"    => CLIENT_ID,      // REQUIRED Stored client identifier
-     *     "user_id"      => USER_ID,        // REQUIRED Stored user identifier
-     *     "expires"      => EXPIRES,        // REQUIRED Stored expiration in unix timestamp
-     *     "redirect_uri" => REDIRECT_URI,   // REQUIRED Stored redirect URI
-     *     "scope"        => SCOPE,          // OPTIONAL Stored scope values in space-separated string
+     *     "client_id"       => CLIENT_ID,      // REQUIRED Stored client identifier
+     *     "user_id"         => USER_ID,        // REQUIRED Stored user identifier
+     *     "expires"         => EXPIRES,        // REQUIRED Stored expiration in unix timestamp
+     *     "redirect_uri"    => REDIRECT_URI,   // REQUIRED Stored redirect URI
+	 *     "code_challenge"	 => CODE_CHALLENGE  // OPTIONAL Stored code challenge for PKCE
+     *     "scope"           => SCOPE,          // OPTIONAL Stored scope values in space-separated string
      * );
      * @endcode
      *
@@ -59,16 +60,17 @@ interface AuthorizationCodeInterface
      *
      * Required for OAuth2::GRANT_TYPE_AUTH_CODE.
      *
-     * @param string $code         - Authorization code to be stored.
-     * @param mixed  $client_id    - Client identifier to be stored.
-     * @param mixed  $user_id      - User identifier to be stored.
-     * @param string $redirect_uri - Redirect URI(s) to be stored in a space-separated string.
-     * @param int    $expires      - Expiration to be stored as a Unix timestamp.
-     * @param string $scope        - OPTIONAL Scopes to be stored in space-separated string.
+     * @param string $code           - Authorization code to be stored.
+     * @param mixed  $client_id      - Client identifier to be stored.
+     * @param mixed  $user_id        - User identifier to be stored.
+     * @param string $redirect_uri   - Redirect URI(s) to be stored in a space-separated string.
+     * @param int    $expires        - Expiration to be stored as a Unix timestamp.
+	 * @param string $code_challenge - Proof Key for Code Exchange challenge for extra security.
+     * @param string $scope          - OPTIONAL Scopes to be stored in space-separated string.
      *
      * @ingroup oauth2_section_4
      */
-    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null);
+    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $code_challenge, $scope = null);
 
     /**
      * once an Authorization Code is used, it must be expired

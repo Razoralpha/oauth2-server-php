@@ -72,7 +72,7 @@ class AuthorizeController extends BaseAuthorizeController implements AuthorizeCo
             $params['id_token'] = $this->responseTypes['id_token']->createIdToken($this->getClientId(), $user_id, $this->nonce);
         }
 
-        // add the nonce to return with the redirect URI
+        // Add the nonce to return with the redirect URI
         $params['nonce'] = $this->nonce;
 
         // Add PKCE code challenge.
