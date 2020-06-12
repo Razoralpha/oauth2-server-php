@@ -51,6 +51,8 @@ class AuthorizationCode extends BaseAuthorizationCode implements AuthorizationCo
      *                               user-agent to when the end-user authorization step is completed.
      * @param string $scope - OPTIONAL Scopes to be stored in space-separated string.
      * @param string $id_token - OPTIONAL The OpenID Connect id_token.
+	 * @param string $code_challenge - OPTIONAL Proof Key for Code Exchange challenge for extra security.
+	 * @param string $code_challenge_method - OPTIONAL Hashing/Challenge method Proof Key for Code Exchange challenge.
      *
      * @return string
      * @see http://tools.ietf.org/html/rfc6749#section-4

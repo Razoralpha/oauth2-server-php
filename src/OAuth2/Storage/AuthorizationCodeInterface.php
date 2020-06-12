@@ -49,28 +49,30 @@ interface AuthorizationCodeInterface
      */
     public function getAuthorizationCode($code);
 
-    /**
-     * Take the provided authorization code values and store them somewhere.
-     *
-     * This function should be the storage counterpart to getAuthCode().
-     *
-     * If storage fails for some reason, we're not currently checking for
-     * any sort of success/failure, so you should bail out of the script
-     * and provide a descriptive fail message.
-     *
-     * Required for OAuth2::GRANT_TYPE_AUTH_CODE.
-     *
-     * @param string $code           - Authorization code to be stored.
-     * @param mixed  $client_id      - Client identifier to be stored.
-     * @param mixed  $user_id        - User identifier to be stored.
-     * @param string $redirect_uri   - Redirect URI(s) to be stored in a space-separated string.
-     * @param int    $expires        - Expiration to be stored as a Unix timestamp.
-	 * @param string $code_challenge - Proof Key for Code Exchange challenge for extra security.
-     * @param string $scope          - OPTIONAL Scopes to be stored in space-separated string.
-     *
-     * @ingroup oauth2_section_4
-     */
-    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $code_challenge, $scope = null);
+	/**
+	 * Take the provided authorization code values and store them somewhere.
+	 *
+	 * This function should be the storage counterpart to getAuthCode().
+	 *
+	 * If storage fails for some reason, we're not currently checking for
+	 * any sort of success/failure, so you should bail out of the script
+	 * and provide a descriptive fail message.
+	 *
+	 * Required for OAuth2::GRANT_TYPE_AUTH_CODE.
+	 *
+	 * @param string $code - Authorization code to be stored.
+	 * @param mixed $client_id - Client identifier to be stored.
+	 * @param mixed $user_id - User identifier to be stored.
+	 * @param string $redirect_uri - Redirect URI(s) to be stored in a space-separated string.
+	 * @param int $expires - Expiration to be stored as a Unix timestamp.
+	 * @param string $scope - OPTIONAL Scopes to be stored in space-separated string.
+	 * @param string $id_token - OPTIONAL The OpenID Connect id_token.
+	 * @param string $code_challenge - OPTIONAL Proof Key for Code Exchange challenge for extra security.
+	 * @param string $code_challenge_method - OPTIONAL Hashing/Challenge method Proof Key for Code Exchange challenge.
+	 *
+	 * @ingroup oauth2_section_4
+	 */
+    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null, $code_challenge = null, $code_challenge_method = null);
 
     /**
      * once an Authorization Code is used, it must be expired
