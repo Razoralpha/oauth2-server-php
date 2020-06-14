@@ -64,7 +64,7 @@ class AuthorizeController extends BaseAuthorizeController implements AuthorizeCo
     protected function buildAuthorizeParameters($request, $response, $user_id)
     {
         if (!$params = parent::buildAuthorizeParameters($request, $response, $user_id)) {
-            return;
+            return null;
         }
 
         // Generate an id token if needed.

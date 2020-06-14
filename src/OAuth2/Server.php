@@ -209,7 +209,7 @@ class Server implements ResourceControllerInterface,
     }
 
     /**
-     * @return TokenController
+     * @return TokenControllerInterface
      */
     public function getTokenController()
     {

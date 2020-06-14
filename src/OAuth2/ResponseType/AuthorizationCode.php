@@ -40,23 +40,23 @@ class AuthorizationCode implements AuthorizationCodeInterface
     /**
      * Handle the creation of the authorization code.
      *
-     * @param $client_id
-     * Client identifier related to the authorization code
-     * @param $user_id
-     * User ID associated with the authorization code
-     * @param $redirect_uri
-     * An absolute URI to which the authorization server will redirect the
-     * user-agent to when the end-user authorization step is completed.
-     * @param $scope
-     * (optional) Scopes to be stored in space-separated string.
+	 * @param mixed $client_id - Client identifier related to the authorization code
+	 * @param mixed $user_id - User ID associated with the authorization code
+	 * @param string $redirect_uri - An absolute URI to which the authorization server will redirect the
+	 *                               user-agent to when the end-user authorization step is completed.
+	 * @param string $scope - OPTIONAL Scopes to be stored in space-separated string.
+	 * @param string $id_token - OPTIONAL The OpenID Connect id_token.
+	 * @param string $code_challenge - OPTIONAL Proof Key for Code Exchange challenge for extra security.
+	 * @param string $code_challenge_method - OPTIONAL Hashing/Challenge method Proof Key for Code Exchange challenge.
+	 * @return string
      *
      * @see http://tools.ietf.org/html/rfc6749#section-4
      * @ingroup oauth2_section_4
      */
-    public function createAuthorizationCode($client_id, $user_id, $redirect_uri, $scope = null)
+    public function createAuthorizationCode($client_id, $user_id, $redirect_uri, $scope = null, $id_token = null, $code_challenge = null, $code_challenge_method = null)
     {
         $code = $this->generateAuthorizationCode();
-        $this->storage->setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, time() + $this->config['auth_code_lifetime'], $scope);
+        $this->storage->setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, time() + $this->config['auth_code_lifetime'], $scope, $id_token, $code_challenge, $code_challenge_method);
 
         return $code;
     }

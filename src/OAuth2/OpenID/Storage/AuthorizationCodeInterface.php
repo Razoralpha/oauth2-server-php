@@ -30,6 +30,8 @@ interface AuthorizationCodeInterface extends BaseAuthorizationCodeInterface
      * @param int    $expires      - expiration to be stored as a Unix timestamp.
      * @param string $scope        - OPTIONAL scopes to be stored in space-separated string.
      * @param string $id_token     - OPTIONAL the OpenID Connect id_token.
+	 * @param string $code_challenge - OPTIONAL Proof Key for Code Exchange challenge for extra security.
+	 * @param string $code_challenge_method - OPTIONAL Hashing/Challenge method Proof Key for Code Exchange challenge.
      *
      * @ingroup oauth2_section_4
      */
