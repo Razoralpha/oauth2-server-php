@@ -237,59 +237,42 @@ class Pdo implements
         return $code;
     }
 
-    /**
-     * @param string $code
-     * @param mixed  $client_id
-     * @param mixed  $user_id
-     * @param string $redirect_uri
-     * @param int    $expires
-     * @param string $scope
-     * @param string $id_token
-     * @return bool|mixed
-     */
-    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null)
-    {
-        if (func_num_args() > 6) {
-            // we are calling with an id token
-            return call_user_func_array(array($this, 'setAuthorizationCodeWithIdToken'), func_get_args());
-        }
+	/**
+	 * @inheritDoc
+	 */
+	public function setAuthorizationCode($authorization_code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null, $code_challenge = null, $code_challenge_method = null)
+	{
+		$values = func_get_args();
+		$columns = array(
+			'authorization_code',
+			'client_id',
+			'user_id',
+			'redirect_uri',
+			'expires',
+			'scope',
+			'id_token',
+			'code_challenge',
+			'code_challenge_method');
+		$columns = array_slice($columns, 0, count($values));
+
+		$columnString = implode(',', $columns);
+		$valueString = implode(',', array_fill(0, count($values), '?'));
+
+		$updatePairs = "";
+		foreach ($columns as $key => $column)
+			$updatePairs .= (($key>0)?", ":"").$column ."=".$values[$key];
 
         // convert expires to datestring
         $expires = date('Y-m-d H:i:s', $expires);
 
         // if it exists, update it.
-        if ($this->getAuthorizationCode($code)) {
-            $stmt = $this->db->prepare($sql = sprintf('UPDATE %s SET client_id=:client_id, user_id=:user_id, redirect_uri=:redirect_uri, expires=:expires, scope=:scope where authorization_code=:code', $this->config['code_table']));
+        if ($this->getAuthorizationCode($authorization_code)) {
+			$stmt = $this->db->prepare("UPDATE {{$this->config['code_table']}} SET {$updatePairs}");
         } else {
-            $stmt = $this->db->prepare(sprintf('INSERT INTO %s (authorization_code, client_id, user_id, redirect_uri, expires, scope) VALUES (:code, :client_id, :user_id, :redirect_uri, :expires, :scope)', $this->config['code_table']));
+        	$stmt = $this->db->prepare("INSERT INTO {{$this->config["code_table"]}} ({$columnString}) VALUES ({$valueString})");
         }
 
-        return $stmt->execute(compact('code', 'client_id', 'user_id', 'redirect_uri', 'expires', 'scope'));
-    }
-
-    /**
-     * @param string $code
-     * @param mixed  $client_id
-     * @param mixed  $user_id
-     * @param string $redirect_uri
-     * @param string $expires
-     * @param string $scope
-     * @param string $id_token
-     * @return bool
-     */
-    private function setAuthorizationCodeWithIdToken($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null)
-    {
-        // convert expires to datestring
-        $expires = date('Y-m-d H:i:s', $expires);
-
-        // if it exists, update it.
-        if ($this->getAuthorizationCode($code)) {
-            $stmt = $this->db->prepare($sql = sprintf('UPDATE %s SET client_id=:client_id, user_id=:user_id, redirect_uri=:redirect_uri, expires=:expires, scope=:scope, id_token =:id_token where authorization_code=:code', $this->config['code_table']));
-        } else {
-            $stmt = $this->db->prepare(sprintf('INSERT INTO %s (authorization_code, client_id, user_id, redirect_uri, expires, scope, id_token) VALUES (:code, :client_id, :user_id, :redirect_uri, :expires, :scope, :id_token)', $this->config['code_table']));
-        }
-
-        return $stmt->execute(compact('code', 'client_id', 'user_id', 'redirect_uri', 'expires', 'scope', 'id_token'));
+        return $stmt->execute($values);
     }
 
     /**

@@ -173,28 +173,35 @@ class CouchbaseDB implements AuthorizationCodeInterface,
         return is_null($code) ? false : $code;
     }
 
-    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null)
-    {
+	/**
+	 * @inheritDoc
+	 */
+		public function setAuthorizationCode($authorization_code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null, $code_challenge = null, $code_challenge_method = null)
+		{
         // if it exists, update it.
-        if ($this->getAuthorizationCode($code)) {
-            $this->setObjectByType('code_table',$code, array(
-                'authorization_code' => $code,
+        if ($this->getAuthorizationCode($authorization_code)) {
+            $this->setObjectByType('code_table',$authorization_code, array(
+                'authorization_code' => $authorization_code,
                 'client_id' => $client_id,
                 'user_id' => $user_id,
                 'redirect_uri' => $redirect_uri,
                 'expires' => $expires,
                 'scope' => $scope,
                 'id_token' => $id_token,
+				'code_challenge' => $code_challenge,
+				'code_challenge_method' => $code_challenge_method
             ));
         } else {
-            $this->setObjectByType('code_table',$code,array(
-                'authorization_code' => $code,
+            $this->setObjectByType('code_table',$authorization_code,array(
+                'authorization_code' => $authorization_code,
                 'client_id' => $client_id,
                 'user_id' => $user_id,
                 'redirect_uri' => $redirect_uri,
                 'expires' => $expires,
                 'scope' => $scope,
                 'id_token' => $id_token,
+				'code_challenge' => $code_challenge,
+				'code_challenge_method' => $code_challenge_method
             ));
         }
 
